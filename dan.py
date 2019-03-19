@@ -16,4 +16,5 @@ def openCam():
         key = cv2.waitKey(20)
         if key == 27: # exit on ESC
             break
+    vc.release();
     cv2.destroyWindow("preview")
