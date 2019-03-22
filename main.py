@@ -2,7 +2,7 @@ from dan import *
 from nami import *
 from tony import *
 
-RecordVideo('VideoCapture', 'output.avi')
-
-#openCam()
-hello()
+if __name__ == "__main__":
+    RecordVideo('VideoCapture', 'output.avi')
+    #openCam()
+    hello()
