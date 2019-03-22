@@ -2,6 +2,7 @@ from dan import *
 from nami import *
 from tony import *
 
-openCam()
+RecordVideo('VideoCapture', 'output.avi')
+
+#openCam()
 hello()
-tony()

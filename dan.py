@@ -18,3 +18,4 @@ def openCam():
             break
     vc.release()
     cv2.destroyWindow("preview")
+    
