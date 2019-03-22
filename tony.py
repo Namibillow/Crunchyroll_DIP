@@ -1,14 +1,18 @@
 import cv2
 import time
 import math
+import uuid
+import os
 
 # Records video into [filepath]
 def RecordVideo(filename, filepath):
     cap = cv2.VideoCapture(0)
+    _key_name = uuid.uuid4()
+    _path = '%s%s.avi' % (filepath, str(_key_name))
 
     # Define codec and create VideoWriter object.
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(filepath, fourcc, 20.0, (640,480))
+    out = cv2.VideoWriter(_path, fourcc, 20.0, (640,480))
 
     # Get frame dimmensions.
     width = int(cap.get(3))
@@ -27,7 +31,7 @@ def RecordVideo(filename, filepath):
 
             # Write frame to file, then show it.
             out.write(frame)
-            cv2.imshow(filename, frame)
+            cv2.imshow(filename, frame)            
 
             # Close video on 'Esc'.
             if cv2.waitKey(20) == 27:
@@ -38,3 +42,17 @@ def RecordVideo(filename, filepath):
     cap.release()
     out.release()
     cv2.destroyAllWindows()
+    
+    os.mkdir(filepath+'Frames/'+str(_key_name))
+    SplitVideo(_path, filepath+'Frames/'+str(_key_name))
+
+
+def SplitVideo(video, dest):
+    cap = cv2.VideoCapture(video)
+    success, image = cap.read()
+    count = 0
+    while success:
+        cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
+        success,image = cap.read()
+        count += 1
+        
