@@ -46,7 +46,7 @@ def RecordVideo(filename, filepath):
     os.mkdir(filepath+'Frames/'+str(_key_name))
     SplitVideo(_path, filepath+'Frames/'+str(_key_name))
 
-
+# Splits video feed into individual frames and stores locally.
 def SplitVideo(video, dest):
     cap = cv2.VideoCapture(video)
     success, image = cap.read()
@@ -55,4 +55,6 @@ def SplitVideo(video, dest):
         cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
         success,image = cap.read()
         count += 1
+
+    cap.release()
         
