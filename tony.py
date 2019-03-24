@@ -1,6 +1,5 @@
 import cv2
 import time
-import math
 import uuid
 import os
 
@@ -10,7 +9,7 @@ import os
 def RecordVideo(filename, filepath):
     cap = cv2.VideoCapture(0)
     _key_name = uuid.uuid4()
-    _path = '%s%s.avi' % (filepath, str(_key_name))
+    _path = '%s%s.avi' % (filepath, filename + ' - ' + str(_key_name))
 
     # Define codec and create VideoWriter object.
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -20,7 +19,7 @@ def RecordVideo(filename, filepath):
     width = int(cap.get(3))
     height = int(cap.get(4))
 
-    _textLoc = (20, height - 10)
+    _textLoc = (20, height - 10)  # Location where string will be overlayed.
     _startTime = time.time()
 
     while (cap.isOpened()):
@@ -48,6 +47,7 @@ def RecordVideo(filename, filepath):
 
     os.mkdir(filepath + 'Frames/' + str(_key_name))
     SplitVideo(_path, filepath + 'Frames/' + str(_key_name))
+
 
 # Splits video feed into individual frames and stores locally.
 
