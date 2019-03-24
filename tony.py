@@ -18,7 +18,7 @@ def RecordVideo(filename, filepath):
     width = int(cap.get(3))
     height = int(cap.get(4))
 
-    _textLoc = (20, height - 10)
+    _textLoc = (20, height - 10) # Location where string will be overlayed.
     _startTime = time.time()
 
     while (cap.isOpened()):
@@ -43,6 +43,7 @@ def RecordVideo(filename, filepath):
     out.release()
     cv2.destroyAllWindows()
     
+    # Create folder that holds the individual frames.
     os.mkdir(filepath+'Frames/'+str(_key_name))
     SplitVideo(_path, filepath+'Frames/'+str(_key_name))
 
