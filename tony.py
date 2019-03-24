@@ -4,12 +4,10 @@ import uuid
 import os
 
 # Records video into [filepath]
-
-
 def RecordVideo(filename, filepath):
     cap = cv2.VideoCapture(0)
     _key_name = uuid.uuid4()
-    _path = '%s%s.avi' % (filepath, filename + ' - ' + str(_key_name))
+    _path = '%s%s.mp4' % (filepath, filename + ' - ' + str(_key_name))
 
     # Define codec and create VideoWriter object.
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
