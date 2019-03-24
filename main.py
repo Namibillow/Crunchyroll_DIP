@@ -2,7 +2,7 @@ from dan import *
 from nami import *
 from tony import *
 
-openCam();
-hello()
-tony()
-
+if __name__ == "__main__":
+    RecordVideo('Tony-Capture', './Dataset/PT/')
+    #openCam()
+    hello()
