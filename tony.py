@@ -17,16 +17,14 @@ def RecordVideo(filename, filepath):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(_path, fourcc, 20.0, (width, height))
 
-    # Get frame dimmensions.
-    width = int(cap.get(3))
-    height = int(cap.get(4))
-
     _textLoc = (20, height - 10)  # Location where string will be overlayed.
     _startTime = time.time()
 
     while (cap.isOpened()):
         ret, frame = cap.read()
         if ret == True:
+            frame = cv2.flip(frame,0)
+            
             # Overlay timer string on frame.
             timer = time.time() - _startTime
             timerString = 'Recording for: %ds' % timer
