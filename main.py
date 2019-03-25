@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
     args = vars(parser.parse_args())
 
-    RecordVideo(args['name'], './Dataset/PN/')
+    RecordVideo(args['name'], './Dataset/PT/')
     # openCam()
