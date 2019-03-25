@@ -11,6 +11,13 @@ if __name__ == "__main__":
                         help="name of the person you are recording")
 
     args = vars(parser.parse_args())
-
-    RecordVideo(args['name'], './Dataset/PT/')
+    name = args['name']
+    if name== 'dan':
+        storage = './Dataset/PD/'
+    elif name == 'nami':
+        storage = './Dataset/PN/'
+    elif name == 'tony':
+        storage = './Dataset/PT/'
+        
+    RecordVideo(args['name'], storage)
     # openCam()

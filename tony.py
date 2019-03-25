@@ -23,7 +23,7 @@ def RecordVideo(filename, filepath):
     while (cap.isOpened()):
         ret, frame = cap.read()
         if ret == True:
-            frame = cv2.flip(frame,0)
+            frame = cv2.flip(frame,180)
             
             # Overlay timer string on frame.
             timer = time.time() - _startTime
