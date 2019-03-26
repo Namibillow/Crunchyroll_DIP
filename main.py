@@ -12,12 +12,12 @@ if __name__ == "__main__":
 
     args = vars(parser.parse_args())
     name = args['name']
-    if name== 'dan':
+    if name == 'dan':
         storage = './Dataset/PD/'
     elif name == 'nami':
         storage = './Dataset/PN/'
     elif name == 'tony':
         storage = './Dataset/PT/'
-        
+
     RecordVideo(args['name'], storage)
     # openCam()
