@@ -2,6 +2,7 @@ import cv2
 import time
 import uuid
 import os
+from math import floor
 
 # Records video into [filepath]
 def RecordVideo(filename, filepath):
@@ -31,7 +32,12 @@ def RecordVideo(filename, filepath):
             cv2.putText(frame, timerString, _textLoc, 1, 1, (0, 0, 255))
 
             # Overlay rectangle for face & crop positioning.
-            cv2.rectangle(frame, (384,0),(510,128),(255,0,0),3)
+            cv2.rectangle(
+                frame, 
+                (floor(width/4), floor(height/10) ), 
+                (floor((width*3)/4), floor((height*9)/10) ),
+                (255,255,0), 
+                2)
 
             # Write frame to file, then show it.
             out.write(frame)
@@ -53,8 +59,6 @@ def RecordVideo(filename, filepath):
 
 
 # Splits video feed into individual frames and stores locally.
-
-
 def SplitVideo(video, dest):
     cap = cv2.VideoCapture(video)
     success, image = cap.read()
