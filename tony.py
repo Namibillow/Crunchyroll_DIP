@@ -24,11 +24,14 @@ def RecordVideo(filename, filepath):
         ret, frame = cap.read()
         if ret == True:
             frame = cv2.flip(frame,0)
-            
+
             # Overlay timer string on frame.
             timer = time.time() - _startTime
             timerString = 'Recording for: %ds' % timer
             cv2.putText(frame, timerString, _textLoc, 1, 1, (0, 0, 255))
+
+            # Overlay rectangle for face & crop positioning.
+            cv2.rectangle(frame, (384,0),(510,128),(255,0,0),3)
 
             # Write frame to file, then show it.
             out.write(frame)
@@ -41,8 +44,8 @@ def RecordVideo(filename, filepath):
             break
 
     # Close everything >:(
-    cap.release()
     out.release()
+    cap.release()
     cv2.destroyAllWindows()
 
     os.mkdir(filepath + 'Frames/' + str(_key_name))
