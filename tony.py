@@ -34,10 +34,10 @@ def RecordVideo(filename, filepath):
             # Overlay rectangle for face & crop positioning.
             cv2.rectangle(
                 frame, 
-                (floor(width/4), floor(height/10) ), 
-                (floor((width*3)/4), floor((height*9)/10) ),
-                (255,255,0), 
-                2)
+                (floor(width/4), floor(height/10) ), # (x1,y1) - top-left
+                (floor((width*3)/4), floor((height*9)/10) ), # (x2,y2) - bottom-right
+                (0,255,255), # color
+                2) # thickness
 
             # Write frame to file, then show it.
             out.write(frame)
