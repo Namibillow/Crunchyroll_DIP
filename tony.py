@@ -24,7 +24,7 @@ def RecordVideo(filename, filepath):
         ret, frame = cap.read()
         if ret == True:
             frame = cv2.flip(frame,180)
-            
+
             # Overlay timer string on frame.
             timer = time.time() - _startTime
             timerString = 'Recording for: %ds' % timer
