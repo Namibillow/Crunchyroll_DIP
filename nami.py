@@ -1,14 +1,14 @@
 import random
 import skimage as sk
-from scipy import ndarray, ndimage
 from skimage import io
 import numpy as np
 import os
 from skimage.transform import AffineTransform, warp
+# from skimage.filters import gaussian
 
 
 def random_shift(img):
-    vector = random.uniform(-10, 10), random.uniform(-10, 10)
+    vector = random.uniform(-20, -40), random.uniform(-20, -40)
     transform = AffineTransform(translation=vector)
     shifted = warp(img, transform, mode='wrap', preserve_range=True)
 
@@ -16,30 +16,42 @@ def random_shift(img):
 
 
 def random_noise(img):
-    return sk.util.random_noise(img)
+    variance = np.random.uniform(0., 0.1, 1)
+    return sk.util.random_noise(img, mode="gaussian", var=variance)
 
 
 def rescale_intensity(img):
-    v_min, v_max = np.percentile(img, (0.2, 99.8))
+    v_min, v_max = np.percentile(img, (0.5, 99.5))
     return sk.exposure.rescale_intensity(img, in_range=(v_min, v_max))
 
 
+def random_blur(img):
+    sig = random.uniform(0.5, 1.5)
+    return rescale_intensity(sk.filters.gaussian(img, sigma=sig, multichannel=True))
+
+
 transformation_order = {
+    "blur": random_blur,
+    "blur2": random_blur,
     "noise": random_noise,
     "noise1": random_noise,
     "noise2": random_noise,
-    "noise3": random_noise,
     "shift": random_shift,
+    "shift2": random_shift,
     "rescale": rescale_intensity,
-    "rescale1": rescale_intensity,
-    "rescale2": rescale_intensity,
-    "rescale3": rescale_intensity,
-    "rescale4": rescale_intensity
+    "rescale2": rescale_intensity
 }
 
 
-def data_augment(source_directory=None, specific_dir=None):
+def data_augment(source_directory=None):
+    '''
+    args:
+        source_directory - folder path you want to perform data augmentation
 
+    return:
+        None - folder is created for
+
+    '''
     for root, dirs, files in os.walk(source_directory):
 
         # counter
@@ -71,16 +83,7 @@ def data_augment(source_directory=None, specific_dir=None):
         i += 1
 
 
-'''
-Pipeline(source_directory=storage+'Frames/', output_directory=storage+'Frames')
-'''
-
-'''
-map look up for international morse code
-json file
-label should be 41 each hot encoded
-
-{0: 'a', 1: 'b', 2: 'c', 3: 'd', 4: 'e', 5: 'f', 6: 'g', 7: 'h', 8: 'i', 9: 'j', 10: 'k', 11: 'l', 12: 'm', 13: 'n', 14: 'o', 15: 'p', 16: 'q', 17: 'r', 18: 's', 19: 't', 20: 'u', 21: 'v', 22: 'w', 23: 'x', 24: 'y', 25: 'z', 26: '0', 27: '1', 28: '2', 29: '3', 30: '4', 31: '5', 32: '6', 33: '7', 34: '8', 35: '9', 36: '.',37: ',', 38: '?',39:'/', 40: '@'}
-'''
-dir = os.getcwd() + '/Dataset/PN/Frames/'
-data_augment(source_directory=dir, specific_dir=None)
+#  Example: ###############################
+# dir = os.getcwd() + '/Dataset/PN/Frames/'
+# data_augment(source_directory=dir)
+#########################################
