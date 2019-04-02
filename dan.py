@@ -28,26 +28,74 @@
 '''
 import cv2 
 import os
+import sys
 
 
-# Create the Dot transmutation
-def createDot(directory):
-    if checkDir(directory):
-        return print('All the files are there')
-    else:
-        return print('Stuff aint there xd')
+# Create the Dot transmutation calls
+def createDot(openF, closeF, opclF, clopF):
+    # Get all the information to be able to concat images into video
+    height, width, layers = openF.shape
+    # Message if succesful
+    message = 'called createDot'
+    # Create vid to be returned
+    try:
+        dotVid = cv2.VideoWriter('dot.mp4v', -1, 1, (width, height))
+        # Concat frames into vid
+        dotVid.write(openF)
+        dotVid.write(opclF)
+        dotVid.write(closeF)
+        dotVid.write(clopF)
+        dotVid.write(openF)
+        # Print if successful
+        print(message)
+        # Close everything
+        cv2.destroyAllWindows()
+        dotVid.release()
+        # return the video
+        return None
+    except:
+        print("Oops!",sys.exc_info()[0],"occured.")
 
 # Create the Dash transmutation
-def createDash(directory):
-    if checkDir(directory):
-        return print('All the files are there')
-    else:
-        return print('Stuff aint there xd')
+def createDash(openF, closeF, opclF, clopF):
+    # Get all the information to be able to concat images into video
+    height, width, layers = openF.shape
+    message = 'called createDash'
+    try:
+        dashVid = cv2.VideoWriter('dash.mp4v', -1, 1, (width, height))
+        # Concat frames into vid
+        dashVid.write(openF)
+        dashVid.write(opclF)
+        dashVid.write(closeF)
+        dashVid.write(closeF)
+        dashVid.write(closeF)
+        dashVid.write(clopF)
+        dashVid.write(openF)
+        # Print if successful
+        print(message)
+        # Close everything
+        cv2.destroyAllWindows()
+        dashVid.release()
+        # return the video
+        return None
+    except:
+        print("Oops!",sys.exc_info()[0],"occured.")
 
 # Create all the transmutations of 0-9 from new directory created from createDot/createDash
 # Doesnt get called until both createDot and CreateDash are finished
 def createNums(directory):
-    return True
+    # only do something if checkDir passes
+    if checkDir(directory):
+        # Store in variables to later recall
+        openF  = cv2.imread('open.jpg')
+        closeF = cv2.imread('close.jpg')
+        opclF  = cv2.imread('opcl.jpg')
+        clopF  = cv2.imread('clop.jpg')
+        # Call createDot and createDash to create them from ^
+        createDot(openF, closeF, opclF, clopF)
+        createDash(openF, closeF, opclF, clopF)
+        # Create all the numbers if ^ was succesful
+        print('videos createsd')
 
 # Checks to make sure all the files are included in the passed directory
 def checkDir(directory):

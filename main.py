@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # All of the files for each subject should be inside Frames/Base/
     elif step == '2':
         newDir = storage + 'Frames/Base/'
-        checkDir(newDir)
+        createNums(newDir)
     else:
         print(step + ' is not currently accepted, please run again')
     # openCam()
