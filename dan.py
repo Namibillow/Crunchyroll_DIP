@@ -52,8 +52,13 @@ def createNums(directory):
 # Checks to make sure all the files are included in the passed directory
 def checkDir(directory):
     # Move to cur directory
+    if not os.path.exists(directory):
+        print('Path doesnt exist')
+        return False
+    print(directory)
     os.chdir(directory);
-    print(os.getcwd);
+    cwd = os.getcwd()
+    print(cwd);
     # Store values to check
     openExist = os.path.exists('open.jpg')
     closeExist = os.path.exists('close.jpg')
