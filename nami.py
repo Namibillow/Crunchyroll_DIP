@@ -1,89 +1,168 @@
-import random
-import skimage as sk
-from skimage import io
+import imgaug as ia
 import numpy as np
 import os
-from skimage.transform import AffineTransform, warp
-# from skimage.filters import gaussian
+from imgaug import augmenters as iaa
+# import imageio as io
+from skimage import io
+
+# defining our sequence of augmentation we want to apply
+augmenters = [
+    iaa.GaussianBlur(sigma=(1.0, 3.0)),  # blur images with a sigma of 0 to 2.0
+    iaa.MotionBlur((3, 5)),  # blur image
+    iaa.AdditiveGaussianNoise(scale=(0, 0.05 * 255)),  # Add gaussian noise to an image, sampled once per pixel from a normal distribution N(0, 0.05*255)
+    iaa.AdditiveLaplaceNoise(scale=(0, 0.05 * 255)),
+    iaa.Multiply((0.5, 1.5), per_channel=0.5),
+    iaa.Multiply((0.5, 1.5)),  # Multiply each image with a random value between 0.5 and 1.5:
+
+    iaa.Dropout(p=(0.05, 0.15)),  # Sample per image a value p from the range 0.05<=p<=0.15 and then drop p percent of all pixels in the image (i.e. convert them to black pixels):
+
+    iaa.ImpulseNoise(p=(0.03, 0.06)),
+    iaa.Salt(p=(0.03, 0.05)),
+    iaa.Add((-40, 40)),  # adding random value to pixels
+    iaa.SigmoidContrast(6.1, 0.5)
+]
 
 
-def random_shift(img):
-    vector = random.uniform(-20, -40), random.uniform(-20, -40)
-    transform = AffineTransform(translation=vector)
-    shifted = warp(img, transform, mode='wrap', preserve_range=True)
-
-    return shifted.astype(img.dtype)
-
-
-def random_noise(img):
-    variance = np.random.uniform(0., 0.1, 1)
-    return sk.util.random_noise(img, mode="gaussian", var=variance)
-
-
-def rescale_intensity(img):
-    v_min, v_max = np.percentile(img, (0.5, 99.5))
-    return sk.exposure.rescale_intensity(img, in_range=(v_min, v_max))
-
-
-def random_blur(img):
-    sig = random.uniform(0.5, 1.5)
-    return rescale_intensity(sk.filters.gaussian(img, sigma=sig, multichannel=True))
-
-
-transformation_order = {
-    "blur": random_blur,
-    "blur2": random_blur,
-    "noise": random_noise,
-    "noise1": random_noise,
-    "noise2": random_noise,
-    "shift": random_shift,
-    "shift2": random_shift,
-    "rescale": rescale_intensity,
-    "rescale2": rescale_intensity
-}
-
-
-def data_augment(source_directory=None):
+def check_dir_or_create(dir):
     '''
-    args:
-        source_directory - folder path you want to perform data augmentation
+    create a directory to store generated images. If dir is already exists, then it will ask you to name the new directory
+    '''
+    if os.path.exists(dir):
+        new_dir = input('Type different directory name (no slashes needed): \n')
+        first_part, _ = os.path.split(dir)
 
+        # only change the last directory Name
+        dir = os.path.join(first_part, new_dir)
+
+    os.makedirs(dir)
+    print(f"successfully made new directory: {dir}")
+
+
+def apply_aug(f, image):
+    '''
+    input:
+        f : augment function that will be applied
+        image : an image
     return:
-        None - folder is created for
-
+        tranformed_image
     '''
-    for root, dirs, files in os.walk(source_directory):
-
-        # counter
-        i = 1
-        if not dirs and files is not None:  # if there is no sub dirs
-            try:  # create a new directory per frame set
-                save_path = root + '-copy' + str(i)
-                print(save_path)
-                os.mkdir(save_path)
-            except OSError:
-                print("Creation of the directory %s failed" % save_path)
-            else:
-                print("Successfully created the directory %s " % save_path)
-
-        for name in files:
-            print("root:, {} \n dir: {}. \n filename: {} \n".format(root, dirs, name))
-            j = 1
-            if name.endswith(".jpg"):
-                # read image as an two dimensional array of pixels
-                image_to_transform = io.imread(root + '/' + name)
-
-                for k, v in transformation_order.items():
-                    # perform augmentation
-                    new_img = v(image_to_transform)
-                    new_img_name = save_path + '/' + 'c' + str(j) + '.jpg'
-                    # print(new_img_name)
-                    io.imsave(new_img_name, new_img)
-                    j += 1
-        i += 1
+    return f.augment_image(image)
 
 
-#  Example: ###############################
-# dir = os.getcwd() + '/Dataset/PN/Frames/'
-# data_augment(source_directory=dir)
-#########################################
+def get_immediate_subdirectories(p_dir):
+    '''
+    input:
+        p_dir: parent directory
+    return:
+        list of immediate subdirectories of p_dir
+    '''
+    return [name for name in os.listdir(p_dir)
+            if os.path.isdir(os.path.join(p_dir, name))]
+
+
+def get_image_files(p_dir):
+    '''
+    input:
+        p_dir: parent directory
+    return:
+        list of all image files in p_dir
+    '''
+    return [img for img in os.listdir(p_dir) if img.endswith('jpg')]
+
+
+def load_img(image_path):
+    '''
+    Input:
+        image_path: absolute path of where image is at
+    Output:
+        numpy array of the image
+    '''
+    return io.imread(image_path)
+
+
+def perform_aug(images, path):
+    img_pathes = [os.path.join(path, image) for image in images]
+    print(img_pathes)  # eg. ['/test1/test2/test3/dog4.jpg',...]
+    c = 0
+    for aug in augmenters:
+        # turn to list of absolute pathes of images
+        aug_images = [apply_aug(aug, load_img(im_path)) for im_path in img_pathes]
+        print(f'num of aug_images should be {len(img_pathes)} and actually {len(aug_images)}')
+        # get the directory name of this file
+        dir_name = os.path.basename(os.path.dirname(img_pathes[0]))  # 'test3'
+        dir_path = os.path.dirname(img_pathes[0])  # '/test1/test2/test3'
+
+        # create new directory
+        new_dir_path = dir_path.replace(dir_name, dir_name + '_c_' + str(c + 1), 1)  # '/test1/test2/test3_c_1'
+        check_dir_or_create(new_dir_path)
+
+        i = 0
+        for im in aug_images:
+
+            orig_im_name = os.path.basename(img_pathes[i])  # 'dog4.jpg'
+            orig_filename, ext = os.path.splitext(orig_im_name)  # ['dog4','.jpg']
+
+            new_filename = orig_filename + '_copy_{}'.format(c + 1) + ext  # 'dog4_copy_1.jpg'
+
+            # concatinate new directory and new image name
+            new_path = os.path.join(new_dir_path, new_filename)
+
+            # save image
+            io.imsave(new_path, im)
+            i += 1
+        c += 1
+
+    print('aug done!')
+
+
+def data_augment(dir):
+    # if dir is a directory and the directory is not empty
+    if os.path.isdir(dir) and not len(os.listdir(dir)) == 0:
+
+        # Check if there are subdirectories
+        folders = get_immediate_subdirectories(dir)
+        print(f"There are total of : {len(folders)}")
+        print("Folders are: ", folders)
+
+        # if you passed parent folder containing multiple subfolders
+        if folders:
+            for folder in folders:
+                fullPath = os.path.join(dir, folder)
+                images = get_image_files(fullPath)
+
+                print(f'folder "{folder}" has {len(images)} pictures.')
+                print('images: ', images)
+
+                # If there are any images, then apply augmentation
+                if images:
+                    perform_aug(images, fullPath)
+
+        #  if there is no subfolders, but files, then just get all images
+        else:
+            images = get_image_files(dir)
+            if images:
+                perform_aug(images, dir)
+
+    # if dir is just an image file
+    elif os.path.isfile(dir) and dir.endswith(".jpg"):
+        seq = iaa.Sequential(augmenters, random_order=False)
+        image = load_img(dir)
+        images_aug = seq.augment_image(image)
+        # save augmented images in same directory
+        for im in images_aug:
+            # counter
+            c = 1
+            root, ext = os.path.splitext(dir)
+            new_path = root + '_copy_{}'.format(c) + ext
+            # ex: if original image is frog.jpg then new image will be named as frog_copy_1.jpg
+            c += 1
+            skimage.imsave(new_path, im)
+    else:
+        print("You passed non existing thing...")
+    return
+
+
+################ Example calling ###############################
+## source_path = os.getcwd() + '/Dataset/PN/Frames/'
+# source_path = os.getcwd()
+# data_augment(dir=source_path)
