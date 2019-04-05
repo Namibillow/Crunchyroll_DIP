@@ -68,7 +68,7 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int):
     success, image = cap.read()
     count = 0
     while success:
-        # crop image.
+        # crop image with some offset to eliminate rectangle overlay.
         image = image[p1[1]+2:p2[1]-2, p1[0]+2:p2[0]-2]
         
         cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
