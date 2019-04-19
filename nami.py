@@ -67,7 +67,8 @@ def get_image_files(p_dir):
     return:
         list of all image files in p_dir
     '''
-    return [img for img in os.listdir(p_dir) if img.endswith('jpg')]
+    # change img.endswith input parameter for different images.
+    return [img for img in os.listdir(p_dir) if img.endswith('png')]
 
 
 def load_img(image_path):
