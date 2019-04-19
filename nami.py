@@ -163,6 +163,6 @@ def data_augment(dir):
 
 
 ################ Example calling ###############################
-## source_path = os.getcwd() + '/Dataset/PN/Frames/'
-# source_path = os.getcwd()
-# data_augment(dir=source_path)
+source_path = os.getcwd() + '/Dataset/PN/Frames/'
+ #source_path = os.getcwd()
+data_augment(dir=source_path)
