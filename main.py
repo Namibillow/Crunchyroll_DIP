@@ -18,12 +18,6 @@ if __name__ == "__main__":
         storage = './Dataset/PN/'
     elif name == 'tony':
         storage = './Dataset/PT/'
-<<<<<<< HEAD
-
-
-
-    RecordVideo(args['name'], storage)
-=======
     # Ask the person what they want to do/test
     step = input('What would you like to do: 1 to create a video, 2 to create data set(only if folders+files already chosen/made)\n')
     if step == '1':
@@ -35,5 +29,4 @@ if __name__ == "__main__":
         createNums(newDir)
     else:
         print(step + ' is not currently accepted, please run again')
->>>>>>> 05a60a3461f7734881a341bcf261d3ea47aae8d3
     # openCam()
