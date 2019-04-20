@@ -79,6 +79,9 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int):
     cap.release()
 
 # Concatenates frames into a single video file.
+#   frames = array of images (size 4 for out dataset).
+#   identifier = output video file name that identifies sequence.
+#   person = which person does this data belong to (PT, PD, PN).
 def CatFrames(frames, identifier, person):
     output_path = './Dataset/%s/RawData/Base' % person
     os.mkdir(output_path)
