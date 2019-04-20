@@ -80,24 +80,15 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int):
 
 # Concatenates frames into a single video file.
 def CatFrames(frames, identifier, person):
-    # construct argument parser.
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-ext", "--extension", required=False, 
-                    default='jpg', help="extension name. default is 'png'")
-    ap.add_argument("-o", "--output", required=False, 
-                    default='%s.mp4v' % identifier, help="output video file")
-    args = vars(ap.parse_args())
-
-    dir_path = './Dataset/%s/RawData/Base' % person
-    ext = args['extension']
-    output = args['output']
+    output_path = './Dataset/%s/RawData/Base' % person
+    os.mkdir(output_path)
 
     # determine width and height of image.
     height, width, channels = frames[0].shape
 
     # define the codec and create VideoWriter object.
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(output, fourcc, 20.0, (width, height))
+    out = cv2.VideoWriter(output_path, fourcc, 20.0, (width, height))
 
     for frame in frames:
         out.write(frame)
