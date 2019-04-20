@@ -70,7 +70,8 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int):
     count = 0
     while success:
         # crop image with some offset to eliminate rectangle overlay.
-        image = image[p1[1]+2:p2[1]-2, p1[0]+2:p2[0]-2]
+        if (p1 and p2):
+            image = image[p1[1]+2:p2[1]-2, p1[0]+2:p2[0]-2]
         
         cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
         success, image = cap.read()
@@ -78,23 +79,3 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int):
 
     cap.release()
 
-# Concatenates frames into a single video file.
-#   frames[array of im] = array of images (size 4 for out dataset).
-#   identifier[string] = output video file name that identifies sequence.
-#   person[string] = which person does this data belong to (PT, PD, PN).
-def CatFrames(frames, identifier, person):
-    output_path = './Dataset/%s/RawData/Base' % person
-    os.mkdir(output_path)
-
-    # determine width and height of image.
-    height, width, channels = frames[0].shape
-
-    # define the codec and create VideoWriter object.
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(output_path, fourcc, 20.0, (width, height))
-
-    for frame in frames:
-        out.write(frame)
-
-    out.release()
-    cv2.destroyAllWindows()

@@ -29,7 +29,7 @@
 import cv2 
 import os
 import sys
-
+from nami import *
 
 # Create the Dot transmutation calls
 def createDot(openF, closeF, opclF, clopF):
@@ -39,13 +39,13 @@ def createDot(openF, closeF, opclF, clopF):
     message = 'called createDot'
     # Create vid to be returned
     try:
-        dotVid = cv2.VideoWriter('dot.mp4v', -1, 1, (width, height))
-        # Concat frames into vid
-        dotVid.write(openF)
-        dotVid.write(opclF)
-        dotVid.write(closeF)
-        dotVid.write(clopF)
-        dotVid.write(openF)
+        frameArr = []
+        frameArr.append(openF)
+        frameArr.append(closeF)
+        frameArr.append(opclF)
+        frameArr.append(clopF)
+        CatFrames(frameArr, 'dot', 'PT')
+        
         # Print if successful
         print(message)
         # Close everything
@@ -62,15 +62,16 @@ def createDash(openF, closeF, opclF, clopF):
     height, width, layers = openF.shape
     message = 'called createDash'
     try:
-        dashVid = cv2.VideoWriter('dash.mp4v', -1, 1, (width, height))
-        # Concat frames into vid
-        dashVid.write(openF)
-        dashVid.write(opclF)
-        dashVid.write(closeF)
-        dashVid.write(closeF)
-        dashVid.write(closeF)
-        dashVid.write(clopF)
-        dashVid.write(openF)
+        frameArr = []
+        frameArr.append(openF)
+        frameArr.append(opclF)
+        frameArr.append(closeF)
+        frameArr.append(closeF)
+        frameArr.append(closeF)
+        frameArr.append(clopF)
+        frameArr.append(openF)
+        CatFrames(frameArr, 'dash', 'PT')
+
         # Print if successful
         print(message)
         # Close everything
@@ -84,18 +85,26 @@ def createDash(openF, closeF, opclF, clopF):
 # Create all the transmutations of 0-9 from new directory created from createDot/createDash
 # Doesnt get called until both createDot and CreateDash are finished
 def createNums(directory):
+    data_augment(directory)
+    all_paths = []
+    for x in os.walk(directory):
+        all_paths.append(x[0])
+    del all_paths[0]
+    print(all_paths)
     # only do something if checkDir passes
-    if checkDir(directory):
-        # Store in variables to later recall
-        openF  = cv2.imread('open.jpg')
-        closeF = cv2.imread('close.jpg')
-        opclF  = cv2.imread('opcl.jpg')
-        clopF  = cv2.imread('clop.jpg')
-        # Call createDot and createDash to create them from ^
-        createDot(openF, closeF, opclF, clopF)
-        createDash(openF, closeF, opclF, clopF)
-        # Create all the numbers if ^ was succesful
-        print('videos createsd')
+    for path in all_paths:
+
+        if checkDir(path):
+            # Store in variables to later recall
+            openF  = cv2.imread('open.jpg')
+            closeF = cv2.imread('close.jpg')
+            opclF  = cv2.imread('opcl.jpg')
+            clopF  = cv2.imread('clop.jpg')
+            # Call createDot and createDash to create them from ^
+            createDot(openF, closeF, opclF, clopF)
+            createDash(openF, closeF, opclF, clopF)
+            # Create all the numbers if ^ was succesful
+            print('videos createsd')
 
 # Checks to make sure all the files are included in the passed directory
 def checkDir(directory):
@@ -134,3 +143,25 @@ def checkDir(directory):
         return False
 
 
+
+# Concatenates frames into a single video file.
+#   frames[array of im] = array of images (size 4 for out dataset).
+#   identifier[string] = output video file name that identifies sequence.
+#   person[string] = which person does this data belong to (PT, PD, PN).
+def CatFrames(frames, identifier, person):
+    output_path = '\Dataset\%s\RawData\Base\%s.avi' % (person, identifier)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = '%s%s' % (dir_path, output_path)
+
+    output_path = dir_path
+    # determine width and height of image.
+    height, width, channels = frames[0].shape
+
+    # define the codec and create VideoWriter object.
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(output_path, fourcc, 20.0, (width, height))
+
+    for frame in frames:
+        out.write(frame)
+    out.release()
+    cv2.destroyAllWindows()
