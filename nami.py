@@ -68,7 +68,7 @@ def get_image_files(p_dir):
         list of all image files in p_dir
     '''
     # change img.endswith input parameter for different images.
-    return [img for img in os.listdir(p_dir) if img.endswith('png')]
+    return [img for img in os.listdir(p_dir) if img.endswith('jpg')]
 
 
 def load_img(image_path):
@@ -101,12 +101,14 @@ def perform_aug(images, path):
         for im in aug_images:
 
             orig_im_name = os.path.basename(img_pathes[i])  # 'dog4.jpg'
-            orig_filename, ext = os.path.splitext(orig_im_name)  # ['dog4','.jpg']
 
-            new_filename = orig_filename + '_copy_{}'.format(c + 1) + ext  # 'dog4_copy_1.jpg'
+            # uncomment following this if you change the image names #
+            # orig_filename, ext = os.path.splitext(orig_im_name)  # ['dog4','.jpg']
+
+            # new_filename = orig_filename + '_copy_{}'.format(c + 1) + ext  # 'dog4_copy_1.jpg'
 
             # concatinate new directory and new image name
-            new_path = os.path.join(new_dir_path, new_filename)
+            new_path = os.path.join(new_dir_path, orig_im_name)
 
             # save image
             io.imsave(new_path, im)
@@ -157,13 +159,15 @@ def data_augment(dir):
             new_path = root + '_copy_{}'.format(c) + ext
             # ex: if original image is frog.jpg then new image will be named as frog_copy_1.jpg
             c += 1
-            skimage.imsave(new_path, im)
+            io.imsave(new_path, im)
     else:
         print("You passed non existing thing...")
     return
 
 
-################ Example calling ###############################
-source_path = os.getcwd() + '/Dataset/PN/Frames/'
- #source_path = os.getcwd()
-data_augment(dir=source_path)
+if __name__ == "__main__":
+    ################ Example calling ###############################
+    source_path = os.getcwd() + '/Dataset/toy/'
+
+    #source_path = os.getcwd()
+    data_augment(dir=source_path)
