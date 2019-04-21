@@ -19,10 +19,14 @@ def create_folder(video_name, dest_path):
     Return the label dir for that video
     '''
     root, ext = os.path.splitext(video_name) #dot1
-
+    print(root)
+    print(dest_path)
     label_path = os.path.join(dest_path, root)
-
-    os.mkdir(label_path)
+    try:
+        os.mkdir(label_path)
+    except:
+        print("Oops!", label_path, "doesnt exist\n")
+   
 
     return label_path
 
@@ -31,20 +35,21 @@ def create_folder(video_name, dest_path):
 def build_dataset(videos, dest_path):
     for video in videos:
         label_path = create_folder(video, dest_path)
-        SplitVideo(vidoe=video, dest=label_path)
+        SplitVideo(video=video, dest=label_path)
 
 
 # def create_dir(train_p, test_p):
-    for path in [train_p, test_p]:
-        for i in range(10):
-            os.mkdir(os.path.join(path, 'digit_' + str(i)))
+#     for path in [train_p, test_p]:
+#         for i in range(21):
+#             os.mkdir(os.path.join(path, 'digit_' + str(i)))
 
 
 if __name__ == "__main__":
-    parent_dir = os.path.join(os.getcwd(),'Dataset/Base')
+    parent_dir = os.path.join(os.getcwd(),'Dataset/PD/RawData')
+    #print(parent_dir)
 
     videos = os.listdir(parent_dir)
-    videos = [os.path.join(parent_dir, v) for v in videos if v.endswith('mp4v')]
+    videos = [os.path.join(parent_dir, v) for v in videos if v.endswith('avi')]
 
     # print(videos)
 
@@ -54,7 +59,8 @@ if __name__ == "__main__":
     # train = videos[test_size:]
     # test = videos[:test_size]
 
-    train_dest = os.path.join(os.getcwd(), 'Dataset/train')
+    train_dest = 'Dataset/train'
+    #print(train_dest)
     # test_dest = os.path.join(os.getcwd(), 'Dataset/test')
 
     # create_dir(train_dest,test_dest)
