@@ -30,3 +30,9 @@ DIP/
 └── utils.py - helper functions
 │
 └── buiold_datasets.py - split videos n create training dataset
+
+BUGS(Both low priority as easy to work around):
+│
+└── When running dan.py as part of main process 2 all the files if run on Mac will not have     a place to go and will be put atop of crunchy roll folder (non important as quick to        work around)
+│
+└── When running build_dataset the resulting files will not go inside of /train but instead     create themselves in their parent videos folder

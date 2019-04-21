@@ -88,7 +88,17 @@ def createDash(openF, closeF, opclF, clopF, idx):
 # Create all the transmutations of 0-9 from new directory created from createDot/createDash
 # Doesnt get called until both createDot and CreateDash are finished
 def createNums(directory):
-    data_augment(directory)
+    original_imgs = []
+    # create array containing only original images to be augmented 
+    for x in os.walk(directory):
+        original_imgs.append(os.path.abspath(x[0]))
+    # remove ./Frames from array
+    del original_imgs[0]
+    # use data_aug per folderto create all data
+    for img in original_imgs:
+        data_augment(img)
+    
+    #data_augment(directory)
     all_paths = []
     for x in os.walk(directory):
         all_paths.append(os.path.abspath(x[0]))
