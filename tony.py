@@ -60,22 +60,25 @@ def RecordVideo(filename, filepath):
     cv2.destroyAllWindows()
 
     os.mkdir(filepath + 'RawData/' + str(_key_name))
-    SplitVideo(_path, filepath + 'RawData/' + str(_key_name), (x1,y1), (x2,y2))
+    SplitVideo(_path, filepath + 'RawData/' + str(_key_name), (x1,y1), (x2,y2), 100)
 
 
 # Splits video feed into individual frames and stores locally.
-def SplitVideo(video: str, dest: str, p1: int, p2: int):
+def SplitVideo(video: str, dest: str, p1: int, p2: int, disp: int):
     cap = cv2.VideoCapture(video)
     success, image = cap.read()
     count = 0
+    counter = 0
     while success:
         # crop image with some offset to eliminate rectangle overlay.
         if (p1 and p2):
             image = image[p1[1]+2:p2[1]-2, p1[0]+2:p2[0]-2]
-        
-        cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
+        if (counter >= disp):
+            cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
+            
         success, image = cap.read()
         count += 1
+        counter += 1
 
     cap.release()
 
