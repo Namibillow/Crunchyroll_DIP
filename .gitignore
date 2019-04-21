@@ -6,3 +6,8 @@ Dataset/PN/
 Dataset/PT/
  .DS_Store
 .ipynb_checkpoints/
+.idea/
+dan.pyc
+.DS_Store/
+
+\.DS_Store

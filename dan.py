@@ -156,7 +156,7 @@ def CatFrames(frames, identifier, person):
     output_path = '\Dataset\%s\RawData\Base\%s.avi' % (person, identifier)
     dir_path = os.path.dirname(os.path.realpath(__file__))
     dir_path = '%s%s' % (dir_path, output_path)
-
+    print(dir_path)
     output_path = dir_path
     # determine width and height of image.
     height, width, channels = frames[0].shape

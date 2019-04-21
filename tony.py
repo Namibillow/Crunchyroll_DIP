@@ -9,14 +9,14 @@ from math import floor
 def RecordVideo(filename, filepath):
     cap = cv2.VideoCapture(0)
     _key_name = uuid.uuid4()
-    _path = '%s%s.avi' % (filepath, filename + '-' + str(_key_name)) # avi for windows.
+    _path = '%s%s.mp4v' % (filepath, filename + '-' + str(_key_name)) # avi for windows.
 
     # Get the width and height of frame
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
 
     # Define codec and create VideoWriter object.
-    fourcc = cv2.VideoWriter_fourcc(*'XVID') # XVID for windows
+    fourcc = cv2.VideoWriter_fourcc(*'MP4V') # XVID for windows
     out = cv2.VideoWriter(_path, fourcc, 20.0, (width, height))
 
     _textLoc = (20, height - 10)  # Location where string will be overlayed.

@@ -1,9 +1,7 @@
 from dan import *
 from nami import *
 from tony import *
-
 import argparse
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -27,8 +25,6 @@ if __name__ == "__main__":
     elif step == '2':
         newDir = storage + 'Frames/'
         createNums(newDir)
-
-
     else:
         print(step + ' is not currently accepted, please run again')
     # openCam()
