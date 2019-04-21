@@ -25,7 +25,7 @@ def main():
     data_loader = DataLoader(DATA_PATH)
 
     X_train, Y_train, X_val, Y_val = data_loader.get_train_data()
-    # X_test, Y_test = data_loader.get_test_data()
+    X_test, Y_test = data_loader.get_test_data()
 
     logging.info('Building the model...')
     my_model = seq2class() # NEED TO PASS PARAMETERS SHIT
@@ -41,9 +41,10 @@ def main():
     plot.plot_loss()
     plot.plot_accuracy()
 
-    # print('Testing...')
-    # loss, accuracy  = my_model.model.evaluate(X_test, Y_test)
-    # print('Testing accuracy')
+    print('Testing...')
+    loss, accuracy  = my_model.model.evaluate(X_test, Y_test)
+    print('Testing loss', loss)
+    print("Test accuracy", accuracy)
 
 if __name__ == "__main__":
     main()

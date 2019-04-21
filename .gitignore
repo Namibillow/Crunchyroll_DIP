@@ -4,6 +4,7 @@ __pycache__/
 Dataset/PD/
 Dataset/PN/
 Dataset/PT/
+Dataset/train/
  .DS_Store
 .ipynb_checkpoints/
 .idea/

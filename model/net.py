@@ -24,10 +24,10 @@ class seq2class(depth=2):
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
         model.add(TimeDistributed(Conv2D(128, (4,4), activation='relu')))
-        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(2, 2))))
+        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
         model.add(TimeDistributed(Conv2D(256, (4,4), activation='relu')))
-        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(2, 2))))
+        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
         # extract features and dropout
         model.add(TimeDistributed(Flatten()))
