@@ -10,25 +10,42 @@ class DataLoader():
         '''
         self.data_path = data_path
         self._load_data()
+        self.label_index = {'dot':0, 'dash':1}
+        self.index_label = {0: 'dot', 1: 'dash'}
 
     # Private function
-    def _load_data():
+    def _load_data(self):
         '''
         Load the images
         NEED TO NORMALIZE THE IMAGE
-        RESCALE
         split videos to frames
-
         '''
+        all_imgs = []
+        train_path = os.path.join(self.data_path, 'train')
+        sub_folders = [i for i in os.listdir(train_path) if isdir(train_path, i)]
+        for folder in sub_folders:
+            imgs = [img for img in listdir(folder) if img.endswith('jpg')]
+
+
+
+
+
+
+        # self.test_path = os.path.join(self.data_path, 'test')
+
+        self.X_train = X_train.reshape([-1, SIZE, SIZE, CHANNEL])
+        self.Y_train = pass
+        self.X_val = pass
+        self.Y_val = pass
+        # self.X_test = pass
+        # self.Y_test = pass
 
     def get_train_data(self, validation_ratio=0.2, shuffle=False):
         '''
         split train and validation set
         return train and labels
         '''
-        self.train_path = os.path.join(self.data_path, 'train')
-
-        return X_train, Y_train, X_val, Y_val
+        return self.X_train, self.Y_train, self.X_val, self.Y_val
 
 
 
@@ -37,8 +54,6 @@ class DataLoader():
         return test and its labels should be tensor datatype
 
         '''
-        self.test_path = os.path.join(self.data_path, 'train')
-
-        return X_test, Y_test
+        return self.X_test, self.Y_test
 
 
