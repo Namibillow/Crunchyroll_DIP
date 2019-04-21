@@ -25,8 +25,10 @@ if __name__ == "__main__":
     ####### Only uncomment this if checking if it works##########
     # All of the files for each subject should be inside Frames/Base/
     elif step == '2':
-        newDir = storage + 'Frames/Base/'
+        newDir = storage + 'Frames/'
         createNums(newDir)
+
+
     else:
         print(step + ' is not currently accepted, please run again')
     # openCam()

@@ -32,7 +32,7 @@ import sys
 from nami import *
 
 # Create the Dot transmutation calls
-def createDot(openF, closeF, opclF, clopF):
+def createDot(openF, closeF, opclF, clopF, idx):
     # Get all the information to be able to concat images into video
     height, width, layers = openF.shape
     # Message if succesful
@@ -44,7 +44,7 @@ def createDot(openF, closeF, opclF, clopF):
         frameArr.append(closeF)
         frameArr.append(opclF)
         frameArr.append(clopF)
-        CatFrames(frameArr, 'dot', 'PT')
+        CatFrames(frameArr, 'p%d_dot'%idx, 'PT')
         
         # Print if successful
         print(message)
@@ -57,7 +57,7 @@ def createDot(openF, closeF, opclF, clopF):
         print("Oops!",sys.exc_info()[0],"occured.")
 
 # Create the Dash transmutation
-def createDash(openF, closeF, opclF, clopF):
+def createDash(openF, closeF, opclF, clopF, idx):
     # Get all the information to be able to concat images into video
     height, width, layers = openF.shape
     message = 'called createDash'
@@ -70,7 +70,7 @@ def createDash(openF, closeF, opclF, clopF):
         frameArr.append(closeF)
         frameArr.append(clopF)
         frameArr.append(openF)
-        CatFrames(frameArr, 'dash', 'PT')
+        CatFrames(frameArr, 'p%d_dash'%idx, 'PT')
 
         # Print if successful
         print(message)
@@ -88,23 +88,28 @@ def createNums(directory):
     data_augment(directory)
     all_paths = []
     for x in os.walk(directory):
-        all_paths.append(x[0])
+        all_paths.append(os.path.abspath(x[0]))
+        print(os.path.abspath(x[0]))
     del all_paths[0]
-    print(all_paths)
     # only do something if checkDir passes
-    for path in all_paths:
-
-        if checkDir(path):
+    for i in range(0, len(all_paths)):
+        abs_path = all_paths[i]
+        if checkDir(abs_path):
             # Store in variables to later recall
             openF  = cv2.imread('open.jpg')
             closeF = cv2.imread('close.jpg')
             opclF  = cv2.imread('opcl.jpg')
             clopF  = cv2.imread('clop.jpg')
             # Call createDot and createDash to create them from ^
-            createDot(openF, closeF, opclF, clopF)
-            createDash(openF, closeF, opclF, clopF)
+            createDot(openF, closeF, opclF, clopF, i)
+            createDash(openF, closeF, opclF, clopF, i)
+            os.chdir('../')
             # Create all the numbers if ^ was succesful
-            print('videos createsd')
+            print('videos created')
+
+
+
+
 
 # Checks to make sure all the files are included in the passed directory
 def checkDir(directory):
@@ -113,14 +118,13 @@ def checkDir(directory):
         print('Path doesnt exist')
         return False
     print(directory)
-    os.chdir(directory);
-    cwd = os.getcwd()
-    print(cwd);
+    os.chdir(directory)
     # Store values to check
     openExist = os.path.exists('open.jpg')
     closeExist = os.path.exists('close.jpg')
     opclExist = os.path.exists('opcl.jpg')
     clopExist = os.path.exists('clop.jpg') 
+    
     # Check if they exist
     if openExist and closeExist and opclExist and clopExist:
         print('All the files exist')
@@ -163,5 +167,6 @@ def CatFrames(frames, identifier, person):
 
     for frame in frames:
         out.write(frame)
+
     out.release()
     cv2.destroyAllWindows()
