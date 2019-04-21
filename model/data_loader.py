@@ -1,7 +1,7 @@
 '''Load the data from Dataset'''
 
 import os
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+from keras.preprocessing.image import img_to_array, load_img
 import numpy as np
 
 from sklearn.model_selection import train_test_split
@@ -55,16 +55,19 @@ class DataLoader():
             for ind, img in enumerate(imgs):
 
                 # TASK: read image
+                img = load_img(img)
+
+                # TASK: Convert to array
                 x = img_to_array(img)
 
-                # TASK: PERFORM Normalization each image divide by 255
+                # TASK: PERFORM Normalization each image divide by x./255
 
                 # TASK: also rescaling?? if so then need to change self.WIDTH, self.HEIGHT
 
-                # Reshape image
-                x = x.reshape((self.HEIGHT, self.WIDTH, 3))
+                # Reshape image to 3D
+                x = x.reshape((self.HEIGHT, self.WIDTH, self.CHANNEL))
 
-                # assign x
+                # assign x to our 4D array
                 train_dataset[ind] = x
 
             X_train[i] = train_dataset

@@ -15,6 +15,8 @@ class seq2class(depth=2):
         '''
         '''
         # Fix parameters ####
+        # Need to decided on model architecture#
+        # should we use pre-trained model??
         model = Sequential()
         # CNN part
         model.add(TimeDistributed(Conv2D(64,(5,5), activation='relu'), input_shape=(frames, width, height, 3)))
@@ -32,8 +34,8 @@ class seq2class(depth=2):
         model.add(Dropout(0.5))
 
         # NOW feed to RNN
-
         model.add(LSTM(256, return_sequences=False, dropout=0.5))
+        # Only returns last output
 
     # classifier with sigmoid activation for multilabel
         model.add(Dense(1, activation='sigmoid'))
