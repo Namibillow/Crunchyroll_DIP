@@ -21,14 +21,14 @@ augmenters = [
     iaa.Add((-40, 40)),  # adding random value to pixels
     iaa.SigmoidContrast(6.1, 0.5),
     iaa.PerspectiveTransform(scale=0.05),
-    iaa.PerspectiveTransform(scale=0.07),
-    iaa.PerspectiveTransform(scale=0.08),
-    iaa.PerspectiveTransform(scale=0.1),
+    iaa.PerspectiveTransform(scale=0.06),
+    iaa.PerspectiveTransform(scale=0.04),
+    iaa.PerspectiveTransform(scale=0.03),
     iaa.PiecewiseAffine(scale=0.03),
     iaa.PiecewiseAffine(scale=0.065),
     iaa.PiecewiseAffine(scale=0.055),
     iaa.Crop(px=(20, 30),keep_size=True),
-    iaa.Crop(px=(30,55))
+    iaa.Crop(px=(30,45))
 ]
 
 

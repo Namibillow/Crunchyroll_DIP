@@ -1,7 +1,7 @@
 '''Load the data from Dataset'''
 
 import os
-
+from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 
 class DataLoader():
     def __init__(self, data_path):
@@ -12,33 +12,58 @@ class DataLoader():
         self._load_data()
         self.label_index = {'dot':0, 'dash':1}
         self.index_label = {0: 'dot', 1: 'dash'}
+        self.WIDTH = 636
+        self.HEIGHT = 140
+        self.CHANNEL = 3
+        self.FRAMES = 7
 
     # Private function
     def _load_data(self):
         '''
         Load the images
         NEED TO NORMALIZE THE IMAGE
-        split videos to frames
+        Return
+            X_train, Y_train : 5D numpy array [N samples, Time (frames), heigh, width, channel]
+            Y_train : size N vector where its 0 or 1
         '''
-        all_imgs = []
+
+
+        train_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH,self.CHANNEL),dtype=np.float32)
+
         train_path = os.path.join(self.data_path, 'train')
         sub_folders = [i for i in os.listdir(train_path) if isdir(train_path, i)]
         for folder in sub_folders:
             imgs = [img for img in listdir(folder) if img.endswith('jpg')]
+            for ind, img in enumerate(imgs):
+
+                # TASK: read image
+                x = img_to_array(img)
+
+                # TASK: PERFORM Normalization each image divide by 255
+
+                # TASK: also rescaling?? if so then need to change self.WIDTH, self.HEIGHT
+
+                # Reshape image
+                x = x.reshape((self.HEIGHT, self.WIDTH, 3))
+
+                # assign it to index at
+                train_dataset[ind] = x
+
+            train_dataset = np.stack(train_dataset)
+
+
+                # TASK: conver to numpy array at this point it will create 4D array [7, height, width, 3]
 
 
 
 
-
-
-        # self.test_path = os.path.join(self.data_path, 'test')
-
-        self.X_train = X_train.reshape([-1, SIZE, SIZE, CHANNEL])
+        # TASK Reshape following
+        self.X_train = X_train.reshape([-1, self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL])
         self.Y_train = pass
         self.X_val = pass
         self.Y_val = pass
-        # self.X_test = pass
-        # self.Y_test = pass
+        self.X_test = pass
+        self.Y_test = pass
 
     def get_train_data(self, validation_ratio=0.2, shuffle=False):
         '''

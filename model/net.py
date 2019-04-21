@@ -1,9 +1,10 @@
 '''define the model'''
 
-from keras.layers import Input, Dense
+from keras.layers import Input, Dense,Flatten
 from keras.models import Sequential
 from keras import backend as K
 from keras.layers import LSTM, Bidirectional, TimeDistributed
+from keras.layers import Conv2D,MaxPooling2D, Dropout
 import os
 
 class seq2class(depth=2):
@@ -11,12 +12,33 @@ class seq2class(depth=2):
         self.model = self.build_model()
 
     def build_model(self):
+        '''
+        '''
+        # Fix parameters
         model = Sequential()
-        model.add(LSTM)
-        model.add(Dense(32, activation='relu', input_shape=(SIZE * SIZE,)))
-        model.add()
+        # CNN part
+        model.add(TimeDistributed(Conv2D(64,(5,5), activation='relu'), input_shape=(data.num_frames, width, height, 3)))
+
+        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
+
+        model.add(TimeDistributed(Conv2D(128, (4,4), activation='relu')))
+        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(2, 2))))
+
+        model.add(TimeDistributed(Conv2D(256, (4,4), activation='relu')))
+        model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(2, 2))))
+
+        # extract features and dropout
+        model.add(TimeDistributed(Flatten()))
+        model.add(Dropout(0.5))
+
+        # NOW feed to RNN
+
+        model.add(LSTM(256, return_sequences=False, dropout=0.5))
+
+    # classifier with sigmoid activation for multilabel
+        model.add(Dense(1, activation='sigmoid'))
         # Add more ####################################################
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         return model
 
