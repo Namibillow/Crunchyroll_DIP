@@ -12,8 +12,9 @@ class seq2class(depth=2):
 
     def build_model(self):
         model = Sequential()
+        model.add(LSTM)
         model.add(Dense(32, activation='relu', input_shape=(SIZE * SIZE,)))
-
+        model.add()
         # Add more ####################################################
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 

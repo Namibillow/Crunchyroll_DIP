@@ -7,19 +7,28 @@ from skimage import io
 
 # defining our sequence of augmentation we want to apply
 augmenters = [
-    iaa.GaussianBlur(sigma=(1.0, 3.0)),  # blur images with a sigma of 0 to 2.0
-    iaa.MotionBlur((3, 5)),  # blur image
-    iaa.AdditiveGaussianNoise(scale=(0, 0.05 * 255)),  # Add gaussian noise to an image, sampled once per pixel from a normal distribution N(0, 0.05*255)
-    iaa.AdditiveLaplaceNoise(scale=(0, 0.05 * 255)),
-    iaa.Multiply((0.5, 1.5), per_channel=0.5),
-    iaa.Multiply((0.5, 1.5)),  # Multiply each image with a random value between 0.5 and 1.5:
+    # iaa.GaussianBlur(sigma=(1.0, 3.0)),  # blur images with a sigma of 0 to 2.0
+    # iaa.MotionBlur((3, 5)),  # blur image
+    # iaa.AdditiveGaussianNoise(scale=(0, 0.05 * 255)),  # Add gaussian noise to an image, sampled once per pixel from a normal distribution N(0, 0.05*255)
+    # iaa.AdditiveLaplaceNoise(scale=(0, 0.05 * 255)),
+    # iaa.Multiply((0.5, 1.5), per_channel=0.5),
+    # iaa.Multiply((0.5, 1.5)),  # Multiply each image with a random value between 0.5 and 1.5:
 
-    iaa.Dropout(p=(0.05, 0.15)),  # Sample per image a value p from the range 0.05<=p<=0.15 and then drop p percent of all pixels in the image (i.e. convert them to black pixels):
+    # iaa.Dropout(p=(0.05, 0.15)),  # Sample per image a value p from the range 0.05<=p<=0.15 and then drop p percent of all pixels in the image (i.e. convert them to black pixels):
 
-    iaa.ImpulseNoise(p=(0.03, 0.06)),
-    iaa.Salt(p=(0.03, 0.05)),
-    iaa.Add((-40, 40)),  # adding random value to pixels
-    iaa.SigmoidContrast(6.1, 0.5)
+    # iaa.ImpulseNoise(p=(0.03, 0.06)),
+    # iaa.Salt(p=(0.03, 0.05)),
+    # iaa.Add((-40, 40)),  # adding random value to pixels
+    # iaa.SigmoidContrast(6.1, 0.5),
+    iaa.PerspectiveTransform(scale=0.05),
+    iaa.PerspectiveTransform(scale=0.07),
+    iaa.PerspectiveTransform(scale=0.08),
+    iaa.PerspectiveTransform(scale=0.1),
+    iaa.PiecewiseAffine(scale=0.03),
+    iaa.PiecewiseAffine(scale=0.065),
+    iaa.PiecewiseAffine(scale=0.055),
+    iaa.Crop(px=(20, 30),keep_size=True),
+    iaa.Crop(px=(30,55))
 ]
 
 
