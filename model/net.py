@@ -11,13 +11,13 @@ class seq2class(depth=2):
     def __init__(self): # NEED TO PASS MORE PARAMS #
         self.model = self.build_model()
 
-    def build_model(self):
+    def build_model(self, width, height, frames):
         '''
         '''
-        # Fix parameters
+        # Fix parameters ####
         model = Sequential()
         # CNN part
-        model.add(TimeDistributed(Conv2D(64,(5,5), activation='relu'), input_shape=(data.num_frames, width, height, 3)))
+        model.add(TimeDistributed(Conv2D(64,(5,5), activation='relu'), input_shape=(frames, width, height, 3)))
 
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 

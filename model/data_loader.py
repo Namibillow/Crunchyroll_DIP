@@ -2,6 +2,9 @@
 
 import os
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+import numpy as np
+
+from sklearn.model_selection import train_test_split
 
 class DataLoader():
     def __init__(self, data_path):
@@ -12,28 +15,43 @@ class DataLoader():
         self._load_data()
         self.label_index = {'dot':0, 'dash':1}
         self.index_label = {0: 'dot', 1: 'dash'}
+
+        # Manually setting change as if we need to
         self.WIDTH = 636
         self.HEIGHT = 140
         self.CHANNEL = 3
         self.FRAMES = 7
-
+        self.NUM_EXAMPLES = 588
     # Private function
     def _load_data(self):
         '''
         Load the images
         NEED TO NORMALIZE THE IMAGE
         Return
-            X_train, Y_train : 5D numpy array [N samples, Time (frames), heigh, width, channel]
-            Y_train : size N vector where its 0 or 1
+            X_train, X_val : 5D numpy array [N samples, Time (frames), heigh, width, channel]
+            Y_train, Y_val : size N by 1 vector where it contains 0 or 1
+            X_test, Y_test
+
         '''
+        # Need fix but general idea 5d idk if this is efficient
+        X_train = np.zeros((self.NUM_EXAMPLES, self.FRAMES, self.HEIGHT, self.WIDTH,self.CHANNEL))
 
-
+        # 4d
         train_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH,self.CHANNEL),dtype=np.float32)
 
+        # labels
+        Y_train = np.zeros(self.NUM_EXAMPLES)
+
         train_path = os.path.join(self.data_path, 'train')
-        sub_folders = [i for i in os.listdir(train_path) if isdir(train_path, i)]
-        for folder in sub_folders:
-            imgs = [img for img in listdir(folder) if img.endswith('jpg')]
+        sub_folders = [i for i in os.listdir(train_path) if os.isdir(train_path, i)]
+
+        for i, folder in enumerate(sub_folders):
+
+            # get the label from the folder name eg "p1_dash" then this video is dash
+            label = folder.split('_')[-1]
+            Y_train[i] = self.label_index[label]
+
+            imgs = [img for img in os.listdir(folder) if img.endswith('jpg')]
             for ind, img in enumerate(imgs):
 
                 # TASK: read image
@@ -46,31 +64,31 @@ class DataLoader():
                 # Reshape image
                 x = x.reshape((self.HEIGHT, self.WIDTH, 3))
 
-                # assign it to index at
+                # assign x
                 train_dataset[ind] = x
 
-            train_dataset = np.stack(train_dataset)
+            X_train[i] = train_dataset
 
 
-                # TASK: conver to numpy array at this point it will create 4D array [7, height, width, 3]
+        assert self.X_train.ndim == 5
+        assert self.X_train.shape[0] == self.NUM_EXAMPLES
 
 
+        Y_train = Y_train.reshape(Y_train.shape[0], -1)
+        # Splits 20% to test set
+        X_train, self.X_test, y_train, self.y_test = train_test_split(X_train, Y_train, test_size=0.2, random_state=1)
 
-
-        # TASK Reshape following
-        self.X_train = X_train.reshape([-1, self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL])
-        self.Y_train = pass
-        self.X_val = pass
-        self.Y_val = pass
-        self.X_test = pass
-        self.Y_test = pass
+        # Split 20% to validation
+        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=1)
 
     def get_train_data(self, validation_ratio=0.2, shuffle=False):
         '''
         split train and validation set
         return train and labels
         '''
-        return self.X_train, self.Y_train, self.X_val, self.Y_val
+
+
+        return self.X_train, self.y_train, self.X_val, self.y_val
 
 
 
@@ -79,6 +97,6 @@ class DataLoader():
         return test and its labels should be tensor datatype
 
         '''
-        return self.X_test, self.Y_test
+        return self.X_test, self.y_test
 
 
