@@ -41,10 +41,13 @@ def createDot(openF, closeF, opclF, clopF, idx):
     try:
         frameArr = []
         frameArr.append(openF)
-        frameArr.append(closeF)
         frameArr.append(opclF)
+        frameArr.append(closeF)
         frameArr.append(clopF)
-        CatFrames(frameArr, 'p%d_dot'%idx, 'PT')
+        frameArr.append(openF)
+        frameArr.append(openF)
+        frameArr.append(openF)
+        CatFrames(frameArr, 'p%d_dot'%idx, 'PD')
         
         # Print if successful
         print(message)
@@ -70,7 +73,7 @@ def createDash(openF, closeF, opclF, clopF, idx):
         frameArr.append(closeF)
         frameArr.append(clopF)
         frameArr.append(openF)
-        CatFrames(frameArr, 'p%d_dash'%idx, 'PT')
+        CatFrames(frameArr, 'p%d_dash'%idx, 'PD')
 
         # Print if successful
         print(message)
