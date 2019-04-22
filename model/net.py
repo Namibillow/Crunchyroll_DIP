@@ -27,7 +27,6 @@ class seq2class():
         model = Sequential()
         # CNN part
         model.add(TimeDistributed(Conv2D(64, (3, 3), activation='relu'), input_shape=(self.FRAMES, self.WIDTH, self.HEIGHT, 3)))
-
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
         model.add(TimeDistributed(Conv2D(128, (3, 3), activation='relu')))
