@@ -30,22 +30,22 @@ def main():
     logging.info('Building the model...')
     my_model = seq2class()  # NEED TO PASS PARAMETERS SHIT
 
-    # print("Here is our model: ")
-    # print(my_model.model.summary())
+    print("Here is our model: ")
+    print(my_model.model.summary())
 
-    # logging.info('Training....')
-    # history = my_model.model.fit(X_train, Y_train, epochs=EPOCHS, verbose=1, batch_size=BATCH_SIZE, validation_data=(X_val, Y_val))
+    logging.info('Training....')
+    history = my_model.model.fit(X_train, Y_train, epochs=EPOCHS, verbose=1, batch_size=BATCH_SIZE, validation_data=(X_val, Y_val))
 
-    # logging.info(history)
-    # # Plotting the loss history #
-    # plot = utils.Plotting(history)
-    # plot.plot_loss()
-    # plot.plot_accuracy()
+    logging.info(history)
+    # Plotting the loss history #
+    plot = utils.Plotting(history)
+    plot.plot_loss()
+    plot.plot_accuracy()
 
-    # print('Testing...')
-    # loss, accuracy = my_model.model.evaluate(X_test, Y_test)
-    # logging.info('Testing loss', loss)
-    # logging.info("Test accuracy", accuracy)
+    print('Testing...')
+    loss, accuracy = my_model.model.evaluate(X_test, Y_test)
+    logging.info('Testing loss', loss)
+    logging.info("Test accuracy", accuracy)
 
 
 if __name__ == "__main__":
