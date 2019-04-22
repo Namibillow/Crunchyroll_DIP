@@ -10,7 +10,6 @@ for im_dir in os.walk('.'):
         image = cv2.imread(absPath)
         h,w,d = image.shape
 
-        newX, newY = image.shape[1]*imgScale, image.shape[0]*imgScale
         newimg = cv2.resize(image, (100, 100))
         cv2.imshow('resized', newimg)
         cv2.waitKey(0)
