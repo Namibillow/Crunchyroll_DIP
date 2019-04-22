@@ -4,6 +4,8 @@ import uuid
 import os
 import argparse
 from math import floor
+import tensorflow as tf
+print(tf.__version__)
 
 # Records video into [filepath]
 def RecordVideo(filename, filepath):
@@ -75,7 +77,7 @@ def SplitVideo(video: str, dest: str, p1: int, p2: int, disp: int):
             image = image[p1[1]+2:p2[1]-2, p1[0]+2:p2[0]-2]
         if (counter >= disp):
             cv2.imwrite('%s/frame%d.jpg' % (dest, count), image)
-            
+
         success, image = cap.read()
         count += 1
         counter += 1

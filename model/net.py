@@ -25,6 +25,7 @@ class seq2class():
         # Fix parameters ####
         # Need to decided on model architecture#
         # should we use pre-trained model??
+
         vggmodel = self.build_vgg((self.HEIGHT, self.WIDTH, self.CHANNEL))
         print(vggmodel.summary())
         x = Input(shape=(self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL))
