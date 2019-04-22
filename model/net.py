@@ -27,7 +27,7 @@ class seq2class():
         # should we use pre-trained model??
 
         vggmodel = self.build_vgg((self.HEIGHT, self.WIDTH, self.CHANNEL))
-        print(vggmodel.summary())
+        # print(vggmodel.summary())
         x = Input(shape=(self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL))
         # print(x.shape)
 
@@ -50,7 +50,7 @@ class seq2class():
 
         model = Model(inputs=x, outputs=h2)
 
-        print(model.summary())
+        # print(model.summary())
 
         # extract features and dropout
         # model.add(TimeDistributed(Flatten()))
