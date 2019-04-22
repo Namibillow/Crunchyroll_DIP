@@ -14,11 +14,11 @@ class DataLoader():
         '''
         self.data_path = data_path
         # Manually setting change as if we need to
-        self.WIDTH = 158
-        self.HEIGHT = 46
+        self.WIDTH = 156
+        self.HEIGHT = 48
         self.CHANNEL = 3
         self.FRAMES = 7
-        self.NUM_EXAMPLES = 1092
+        self.NUM_EXAMPLES = 1134
         self.label_index = {'dot': 0, 'dash': 1}
         self.index_label = {0: 'dot', 1: 'dash'}
 
@@ -50,7 +50,7 @@ class DataLoader():
 
         print(Y_train.shape)
 
-        train_path = os.path.join(self.data_path, 'Dataset/train')
+        train_path = os.path.join(self.data_path, 'train')
         sub_folders = os.listdir(train_path)
         sub_folders = [os.path.join(train_path, sub) for sub in sub_folders]
 
@@ -72,11 +72,12 @@ class DataLoader():
             for ind, img in enumerate(imgs):
 
                 # TASK: read image
-                img = load_img(img)
+                img = load_img(img, target_size=(156, 48))
 
                 # TASK: Convert to array
                 x = img_to_array(img)
                 x = x.astype('float32')
+
                 # normalize to the range 0-1
                 x /= 255.0
 
@@ -116,7 +117,7 @@ class DataLoader():
         print(self.y_val.shape)
 
         # print(self.X_train[2])
-        print(self.y_train[:100])
+        # print(self.y_train[:100])
 
         # Train:
         # Val:
