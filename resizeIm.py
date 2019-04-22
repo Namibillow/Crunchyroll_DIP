@@ -11,7 +11,5 @@ for im_dir in os.walk('.'):
         h,w,d = image.shape
 
         newimg = cv2.resize(image, (100, 100))
-        cv2.imshow('resized', newimg)
-        cv2.waitKey(0)
 
 
