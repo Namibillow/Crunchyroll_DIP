@@ -18,17 +18,17 @@ augmenters = [
 
     iaa.ImpulseNoise(p=(0.03, 0.06)),
     iaa.Salt(p=(0.03, 0.05)),
-    iaa.Add((-40, 40)),  # adding random value to pixels
+    iaa.Add((-30, 30)),  # adding random value to pixels
     iaa.SigmoidContrast(6.1, 0.5),
-    iaa.PerspectiveTransform(scale=0.05),
-    iaa.PerspectiveTransform(scale=0.06),
-    iaa.PerspectiveTransform(scale=0.04),
+    iaa.PerspectiveTransform(scale=0.02),
+    iaa.PerspectiveTransform(scale=0.01),
+    iaa.PerspectiveTransform(scale=0.015),
     iaa.PerspectiveTransform(scale=0.03),
+    iaa.PiecewiseAffine(scale=0.02),
     iaa.PiecewiseAffine(scale=0.03),
-    iaa.PiecewiseAffine(scale=0.065),
-    iaa.PiecewiseAffine(scale=0.055),
-    iaa.Crop(px=(20, 30),keep_size=True),
-    iaa.Crop(px=(30,45))
+    iaa.PiecewiseAffine(scale=0.01),
+    iaa.Crop(px=(10, 20), keep_size=True),
+    iaa.Crop(px=(20, 35))
 ]
 
 

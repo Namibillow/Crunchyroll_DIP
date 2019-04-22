@@ -1,17 +1,24 @@
 '''define the model'''
 
-from keras.layers import Input, Dense,Flatten
+from keras.layers import Input, Dense, Flatten
 from keras.models import Sequential
 from keras import backend as K
-from keras.layers import LSTM, Bidirectional, TimeDistributed
-from keras.layers import Conv2D,MaxPooling2D, Dropout
+from keras.layers import LSTM, TimeDistributed
+from keras.layers import Conv2D, MaxPooling2D, Dropout
 import os
 
-class seq2class(depth=2):
-    def __init__(self): # NEED TO PASS MORE PARAMS #
+
+class seq2class():
+    def __init__(self):  # NEED TO PASS MORE PARAMS #
+        self.WIDTH = 158
+        self.HEIGHT = 46
+        self.CHANNEL = 3
+        self.FRAMES = 7
+        self.NUM_EXAMPLES = 1092
+
         self.model = self.build_model()
 
-    def build_model(self, width, height, frames):
+    def build_model(self):
         '''
         '''
         # Fix parameters ####
@@ -19,14 +26,14 @@ class seq2class(depth=2):
         # should we use pre-trained model??
         model = Sequential()
         # CNN part
-        model.add(TimeDistributed(Conv2D(64,(5,5), activation='relu'), input_shape=(frames, width, height, 3)))
+        model.add(TimeDistributed(Conv2D(64, (3, 3), activation='relu'), input_shape=(self.FRAMES, self.WIDTH, self.HEIGHT, 3)))
 
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
-        model.add(TimeDistributed(Conv2D(128, (4,4), activation='relu')))
+        model.add(TimeDistributed(Conv2D(128, (3, 3), activation='relu')))
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
-        model.add(TimeDistributed(Conv2D(256, (4,4), activation='relu')))
+        model.add(TimeDistributed(Conv2D(256, (3, 3), activation='relu')))
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(1, 1))))
 
         # extract features and dropout
@@ -52,7 +59,6 @@ class seq2class(depth=2):
         print("Saving model...")
         self.model.save_weights(checkpoint_path)
         print("Model saved")
-
 
     # load latest checkpoint from the experiment path defined in the config file
     def load_model(self, checkpoint_path=None):

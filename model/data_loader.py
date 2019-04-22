@@ -6,6 +6,7 @@ import numpy as np
 
 from sklearn.model_selection import train_test_split
 
+
 class DataLoader():
     def __init__(self, data_path):
         '''
@@ -13,17 +14,15 @@ class DataLoader():
         '''
         self.data_path = data_path
         # Manually setting change as if we need to
-        self.WIDTH = 316
-        self.HEIGHT = 92
+        self.WIDTH = 158
+        self.HEIGHT = 46
         self.CHANNEL = 3
         self.FRAMES = 7
         self.NUM_EXAMPLES = 1092
-        self.label_index = {'dot':0, 'dash':1}
+        self.label_index = {'dot': 0, 'dash': 1}
         self.index_label = {0: 'dot', 1: 'dash'}
 
         self._load_data()
-
-
 
     # Private function
     def _load_data(self):
@@ -37,13 +36,12 @@ class DataLoader():
 
         '''
         # Need fix but general idea 5d idk if this is efficient
-        X_train = np.zeros((self.NUM_EXAMPLES, self.FRAMES, self.HEIGHT, self.WIDTH,self.CHANNEL), dtype=np.float32)
+        X_train = np.zeros((self.NUM_EXAMPLES, self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
 
         print(X_train.shape)
 
-
         # 4d
-        train_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH,self.CHANNEL),dtype=np.float32)
+        train_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
 
         print(train_dataset.shape)
 
@@ -53,20 +51,19 @@ class DataLoader():
         print(Y_train.shape)
 
         train_path = os.path.join(self.data_path, 'Dataset/train')
-        sub_folders =os.listdir(train_path)
+        sub_folders = os.listdir(train_path)
         sub_folders = [os.path.join(train_path, sub) for sub in sub_folders]
 
         print(len(sub_folders))
 
-        for i, folder in enumerate(sub_folders[:5]):
+        for i, folder in enumerate(sub_folders):
 
             # get the label from the folder name eg "p1_dash" then this video is 'dash'
             label = folder.split('_')[-1]
 
-            print(f'index {i}:{folder} label is {label}')
+            # print(f'index {i}:{folder} label is {label}')
 
             Y_train[i] = self.label_index[label]
-
 
             imgs = [os.path.join(folder, img) for img in os.listdir(folder) if img.endswith('jpg')]
 
@@ -89,6 +86,7 @@ class DataLoader():
                 try:
                     x = x.reshape((self.HEIGHT, self.WIDTH, self.CHANNEL))
                 except:
+                    print(f'folder {folder} is not same dimension')
                     continue
 
                 # print(x.shape)
@@ -96,7 +94,6 @@ class DataLoader():
                 train_dataset[ind] = x
 
             X_train[i] = train_dataset
-
 
         assert X_train.ndim == 5
         # assert self.X_train.shape[0] == self.NUM_EXAMPLES
@@ -118,6 +115,9 @@ class DataLoader():
         print(self.X_val.shape)
         print(self.y_val.shape)
 
+        # print(self.X_train[2])
+        print(self.y_train[:100])
+
         # Train:
         # Val:
         # Test:
@@ -129,15 +129,12 @@ class DataLoader():
         '''
         return self.X_train, self.y_train, self.X_val, self.y_val
 
-
-
     def get_test_data(self):
         '''
         return test and its labels should be tensor datatype
 
         '''
         return self.X_test, self.y_test
-
 
 
 if __name__ == "__main__":
