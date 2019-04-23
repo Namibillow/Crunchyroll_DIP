@@ -103,10 +103,10 @@ class DataLoader():
         Y_train = Y_train.reshape(Y_train.shape[0], -1)
 
         # # Splits 20% to test set
-        X_train, self.X_test, y_train, self.y_test = train_test_split(X_train, Y_train, test_size=0.1, random_state=1)
+        # X_train, self.X_test, y_train, self.y_test = train_test_split(X_train, Y_train, test_size=0.1, random_state=1)
 
-        print(self.X_test.shape)
-        print(self.y_test.shape)
+        # print(self.X_test.shape)
+        # print(self.y_test.shape)
 
         # # Split 20% to validation
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=1)
@@ -135,7 +135,67 @@ class DataLoader():
         return test and its labels should be tensor datatype
 
         '''
-        return self.X_test, self.y_test
+        self.X_test = np.zeros((5, self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
+
+        # print(X_train.shape)
+
+        # 4d
+        test_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
+
+        self.Y_test = np.zeros(5)
+
+        # print(Y_train.shape)
+
+        test_path = os.path.join(self.data_path, 'test')
+        sub_folders = os.listdir(test_path)
+        sub_folders = [os.path.join(test_path, sub) for sub in sub_folders]
+
+        for i, folder in enumerate(sub_folders):
+
+            # get the label from the folder name eg "p1_dash" then this video is 'dash'
+            label = folder.split('_')[-1]
+
+            # print(f'index {i}:{folder} label is {label}')
+
+            self.Y_test[i] = self.label_index[label]
+
+            imgs = [os.path.join(folder, img) for img in os.listdir(folder) if img.endswith('jpg')]
+
+            assert len(imgs) == 7
+
+            for ind, img in enumerate(imgs):
+
+                # TASK: read image
+                img = load_img(img, target_size=(156, 48))
+
+                # TASK: Convert to array
+                x = img_to_array(img)
+                x = x.astype('float32')
+
+                # normalize to the range 0-1
+                x /= 255.0
+
+                # TASK: also rescaling?? if so then need to change self.WIDTH, self.HEIGHT
+
+                # Reshape image to 3D
+                try:
+                    x = x.reshape((self.HEIGHT, self.WIDTH, self.CHANNEL))
+                except:
+                    print(f'folder {folder} is not same dimension')
+                    continue
+
+                # print(x.shape)
+                # assign x to our 4D array
+                test_dataset[ind] = x
+
+            self.X_test[i] = test_dataset
+
+        assert X_test.ndim == 5
+        # assert self.X_train.shape[0] == self.NUM_EXAMPLES
+
+        # # Convert to column vector
+        self.Y_test = Y_test.reshape(self.Y_test.shape[0], -1)
+        return self.X_test, self.Y_test
 
 
 if __name__ == "__main__":
