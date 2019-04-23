@@ -43,8 +43,8 @@ def main():
     logging.info(f"val accuracy: {history['val_acc']}")
     # Plotting the loss history #
     plot = utils.Plotting(history)
-    plot.plot_loss()
-    plot.plot_accuracy()
+    # plot.plot_loss()
+    # plot.plot_accuracy()
 
     print('Testing...')
     loss, accuracy = my_model.model.evaluate(X_test, Y_test)
