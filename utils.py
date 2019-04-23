@@ -4,6 +4,7 @@ Helper functions
 import logging
 import matplotlib.pyplot as plt
 
+
 def set_logger(log_path):
     """Set the logger to log info in terminal and file `log_path`.
     In general, it is useful to have a logger so that every output to the terminal is saved
@@ -30,18 +31,17 @@ def set_logger(log_path):
         logger.addHandler(stream_handler)
 
 
-
-
 class Plotting():
     def __init__(self, history):
         self.history = history
-        self.loss = self.history.history['loss']
-        self.val_loss = self.history.history['val_loss']
+        self.loss = self.history['loss']
+        self.val_loss = self.history['val_loss']
 
-        self.acc = self.history.history['acc']
-        self.val_acc = self.history.history['val_acc']
+        self.acc = self.history['acc']
+        self.val_acc = self.history['val_acc']
 
         self.epochs = range(1, len(self.loss) + 1)
+
     def plot_loss(self):
         plt.clf()
 
@@ -67,4 +67,11 @@ class Plotting():
         plt.show()
 
 
-
+if __name__ == "__main__":
+    import matplotlib
+    matplotlib.use('TkAgg')
+    plt.plot([1, 2, 3, 4], [10, 20, 25, 30], color='lightblue', linewidth=3)
+    plt.scatter([0.3, 3.8, 1.2, 2.5], [11, 25, 9, 26], color='darkgreen', marker='^')
+    plt.xlim(0.5, 4.5)
+    plt.show()
+    # plt.show()

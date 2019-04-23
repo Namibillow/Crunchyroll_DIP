@@ -36,7 +36,11 @@ def main():
     logging.info('Training....')
     history = my_model.model.fit(X_train, Y_train, epochs=EPOCHS, verbose=1, batch_size=BATCH_SIZE, validation_data=(X_val, Y_val))
 
-    logging.info(history)
+    logging.info(f"train loss: {history['loss']}")
+    logging.info(f"val loss: {history['val_loss']}")
+
+    logging.info(f"train accuracy: {history['acc']}")
+    logging.info(f"val accuracy: {history['val_acc']}")
     # Plotting the loss history #
     plot = utils.Plotting(history)
     plot.plot_loss()
