@@ -23,12 +23,12 @@ augmenters = [
     iaa.PerspectiveTransform(scale=0.02),
     iaa.PerspectiveTransform(scale=0.01),
     iaa.PerspectiveTransform(scale=0.015),
-    iaa.PerspectiveTransform(scale=0.03),
-    iaa.PiecewiseAffine(scale=0.02),
-    iaa.PiecewiseAffine(scale=0.03),
+    iaa.PerspectiveTransform(scale=0.012),
+    iaa.PiecewiseAffine(scale=0.015),
+    iaa.PiecewiseAffine(scale=0.005),
     iaa.PiecewiseAffine(scale=0.01),
-    iaa.Crop(px=(10, 20), keep_size=True),
-    iaa.Crop(px=(20, 35))
+    iaa.Crop(px=(10, 15), keep_size=True),
+    iaa.Crop(px=(10, 15))
 ]
 
 
@@ -176,7 +176,7 @@ def data_augment(dir):
 
 if __name__ == "__main__":
     ################ Example calling ###############################
-    source_path = os.getcwd() + '/Dataset/toy/'
+    source_path = os.getcwd() + '/Dataset/PN/RawData/'
 
     #source_path = os.getcwd()
     data_augment(dir=source_path)
