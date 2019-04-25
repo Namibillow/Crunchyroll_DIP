@@ -34,8 +34,15 @@ class seq2class():
         h2 = TimeDistributed(vggmodel)(x)
         # print(h2.shape)
 
+        # NEWLY ADDED 2D CONV
+        h2 = TimeDistributed(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))(h2)
+
+        h2 = TimeDistributed(MaxPooling2D(pool_size=(2, 2)))(h2)
+
+        #######################
         h2 = TimeDistributed(Flatten())(h2)
 
+        # THIS ADDS GREAT AMOUNT OF PARAMAS
         # h2 = TimeDistributed(Dense(output_dim=4096, activation='relu'))(h2)
 
         h2 = TimeDistributed(Dense(output_dim=1024, activation='relu'))(h2)

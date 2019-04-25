@@ -109,7 +109,9 @@ class DataLoader():
         # print(self.y_test.shape)
 
         # # Split 20% to validation
-        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=1)
+        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_train, Y_train, test_size=0.2, random_state=1)
+
+        # print(self.X_train[0][0].shape)
 
         print(self.X_train.shape)
         print(self.y_train.shape)
@@ -135,20 +137,20 @@ class DataLoader():
         return test and its labels should be tensor datatype
 
         '''
-        self.X_test = np.zeros((5, self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
+        test_path = os.path.join(self.data_path, 'test')
+        sub_folders = os.listdir(test_path)
+        sub_folders = [os.path.join(test_path, sub) for sub in sub_folders]
+
+        self.X_test = np.zeros((len(sub_folders), self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
 
         # print(X_train.shape)
 
         # 4d
         test_dataset = np.ndarray(shape=(self.FRAMES, self.HEIGHT, self.WIDTH, self.CHANNEL), dtype=np.float32)
 
-        self.Y_test = np.zeros(5)
+        self.Y_test = np.zeros(len(sub_folders))
 
         # print(Y_train.shape)
-
-        test_path = os.path.join(self.data_path, 'test')
-        sub_folders = os.listdir(test_path)
-        sub_folders = [os.path.join(test_path, sub) for sub in sub_folders]
 
         for i, folder in enumerate(sub_folders):
 
@@ -190,11 +192,11 @@ class DataLoader():
 
             self.X_test[i] = test_dataset
 
-        assert X_test.ndim == 5
+        assert self.X_test.ndim == 5
         # assert self.X_train.shape[0] == self.NUM_EXAMPLES
 
         # # Convert to column vector
-        self.Y_test = Y_test.reshape(self.Y_test.shape[0], -1)
+        self.Y_test = self.Y_test.reshape(self.Y_test.shape[0], -1)
         return self.X_test, self.Y_test
 
 
