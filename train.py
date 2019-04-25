@@ -33,23 +33,23 @@ def main():
     print("Here is our model: ")
     print(my_model.model.summary())
 
-    # logging.info('Training....')
-    # history = my_model.model.fit(X_train, Y_train, epochs=EPOCHS, verbose=1, batch_size=BATCH_SIZE, validation_data=(X_val, Y_val))
+    logging.info('Training....')
+    history = my_model.model.fit(X_train, Y_train, epochs=EPOCHS, verbose=1, batch_size=BATCH_SIZE, validation_data=(X_val, Y_val))
 
-    # logging.info(f"train loss: {history.history['loss']}")
-    # logging.info(f"val loss: {history.history['val_loss']}")
+    logging.info(f"train loss: {history.history['loss']}")
+    logging.info(f"val loss: {history.history['val_loss']}")
 
-    # logging.info(f"train accuracy: {history.history['acc']}")
-    # logging.info(f"val accuracy: {history.history['val_acc']}")
-    # # Plotting the loss history #
-    # plot = utils.Plotting(history)
-    # # plot.plot_loss()
-    # # plot.plot_accuracy()
+    logging.info(f"train accuracy: {history.history['acc']}")
+    logging.info(f"val accuracy: {history.history['val_acc']}")
+    # Plotting the loss history #
+    plot = utils.Plotting(history)
+    # plot.plot_loss()
+    # plot.plot_accuracy()
 
-    # print('Testing...')
-    # loss, accuracy = my_model.model.evaluate(X_test, Y_test)
-    # logging.info('Testing loss', loss)
-    # logging.info("Test accuracy", accuracy)
+    print('Testing...')
+    loss, accuracy = my_model.model.evaluate(X_test, Y_test)
+    logging.info('Testing loss', loss)
+    logging.info("Test accuracy", accuracy)
 
 
 if __name__ == "__main__":
